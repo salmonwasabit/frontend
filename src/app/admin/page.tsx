@@ -1,4 +1,5 @@
-'use client';
+"use client";
+import { API_BASE_URL } from "@/lib/config";
 
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
@@ -56,7 +57,7 @@ export default function AdminPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+      const response = await fetch(`${API_BASE_URL}/api/products`);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -75,7 +76,7 @@ export default function AdminPage() {
     }
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/products/${id}`, {
         method: 'DELETE',
       });
 

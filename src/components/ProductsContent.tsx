@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/config";
 
 import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
@@ -59,7 +60,7 @@ export default function ProductsContent({ initialCategory }: ProductsContentProp
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
+        const response = await fetch(`${API_BASE_URL}/api/products`);
         if (!response.ok) {
           throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
         }

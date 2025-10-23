@@ -1,6 +1,6 @@
+import { API_BASE_URL } from "./config";
 // Secure authentication utilities for admin access
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export interface LoginCredentials {
   username: string;
@@ -28,7 +28,6 @@ export const login = async (credentials: LoginCredentials): Promise<boolean> => 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(credentials),
-      credentials: 'include', // Include cookies
     });
 
     if (!response.ok) {
@@ -70,7 +69,7 @@ export const isAuthenticated = (): boolean => {
   // Check if token is expired (30 minutes)
   const loginTimestamp = parseInt(loginTime);
   const now = Date.now();
-  const minutesSinceLogin = (now - loginTimestamp) / (1000 * 60 * 60);
+  const minutesSinceLogin = (now - loginTimestamp) / (1000 * 60);
 
   if (minutesSinceLogin > 30) {
     logout();
@@ -90,12 +89,17 @@ export const getCurrentUser = async (): Promise<User | null> => {
     const token = getAccessToken();
     if (!token) return null;
 
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
     const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
       headers: {
         'Authorization': `Bearer ${token}`,
       },
-      credentials: 'include',
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       if (response.status === 401) {
@@ -106,7 +110,11 @@ export const getCurrentUser = async (): Promise<User | null> => {
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching current user:', error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('Request timed out');
+    } else {
+      console.error('Error fetching current user:', error);
+    }
     return null;
   }
 };

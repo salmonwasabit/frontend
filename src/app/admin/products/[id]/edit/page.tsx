@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/config";
 
 import { useState, useEffect, useCallback } from 'react';
 import AdminRoute from '@/components/AdminRoute';
@@ -36,7 +37,7 @@ export default function EditProductPage() {
 
   const fetchProduct = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`);
+      const response = await fetch(`${API_BASE_URL}/api/products/${productId}`);
       if (!response.ok) {
         throw new Error('Product not found');
       }
@@ -106,7 +107,7 @@ export default function EditProductPage() {
           const formDataUpload = new FormData();
           formDataUpload.append('file', image);
 
-          const uploadResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload`, {
+          const uploadResponse = await fetch(`${API_BASE_URL}/api/upload`, {
             method: 'POST',
             body: formDataUpload,
           });
@@ -121,7 +122,7 @@ export default function EditProductPage() {
       }
 
       // Update product with image URLs
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${productId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/products/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

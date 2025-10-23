@@ -1,4 +1,5 @@
 'use client';
+import { API_BASE_URL } from "@/lib/config";
 
 import { useState, useEffect, useCallback } from 'react';
 import AdminRoute from '@/components/AdminRoute';
@@ -29,7 +30,7 @@ export default function EditCategoryPage() {
 
   const fetchCategory = useCallback(async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${categoryId}`);
+      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`);
       if (!response.ok) {
         throw new Error('Category not found');
       }
@@ -64,7 +65,7 @@ export default function EditCategoryPage() {
     setError(null);
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${categoryId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/categories/${categoryId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

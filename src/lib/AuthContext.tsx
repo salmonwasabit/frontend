@@ -32,7 +32,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   const checkAuth = async () => {
+    // Only run on client side
+    if (typeof window === 'undefined') {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
+
+    // Set a fallback timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.warn('Auth check timed out, setting loading to false');
+      setLoading(false);
+    }, 10000); // 10 seconds
+
     try {
       const authenticated = isAuthenticated();
       if (authenticated) {
@@ -48,6 +61,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setUser(null);
       setIsLoggedIn(false);
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };

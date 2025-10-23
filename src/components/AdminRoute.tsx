@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/AuthContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface AdminRouteProps {
   children: React.ReactNode;
@@ -11,15 +11,20 @@ interface AdminRouteProps {
 export default function AdminRoute({ children }: AdminRouteProps) {
   const { isLoggedIn, loading } = useAuth();
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !loading && !isLoggedIn) {
       router.push('/admin/login');
     }
-  }, [isLoggedIn, loading, router]);
+  }, [isLoggedIn, loading, router, mounted]);
 
-  // Show loading state while checking authentication
-  if (loading) {
+  // Show loading state while checking authentication or during SSR
+  if (loading || !mounted) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">

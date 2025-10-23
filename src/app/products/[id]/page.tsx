@@ -1,4 +1,5 @@
 "use client";
+import { API_BASE_URL } from "@/lib/config";
 
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -80,7 +81,7 @@ export default function ProductPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${params.id}`);
+        const response = await fetch(`${API_BASE_URL}/api/products/${params.id}`);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error("Product not found");
