@@ -29,7 +29,7 @@ export default function EditCategoryPage() {
 
   const fetchCategory = useCallback(async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/categories/${categoryId}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${categoryId}`);
       if (!response.ok) {
         throw new Error('Category not found');
       }
@@ -64,7 +64,7 @@ export default function EditCategoryPage() {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/categories/${categoryId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${categoryId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

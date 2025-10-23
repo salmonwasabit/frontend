@@ -59,7 +59,7 @@ export default function ProductsContent({ initialCategory }: ProductsContentProp
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:8000/api/products');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
         if (!response.ok) {
           throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
         }

@@ -80,7 +80,7 @@ export default function ProductPage() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:8000/api/products/${params.id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products/${params.id}`);
         if (!response.ok) {
           if (response.status === 404) {
             throw new Error("Product not found");
