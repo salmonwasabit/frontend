@@ -9,11 +9,16 @@ services:
     restart: unless-stopped
     env_file:
       - .env
-    ports:
-      - "3000:3000"
     networks:
       - vape-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`podzoon.com`) || Host(`www.podzoon.com`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=myresolver"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
 
 networks:
   vape-network:
-    driver: bridge
+    external: true
