@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VAPE LIFE - Premium Vaping Experience",
+  title: "podzoon",
   description:
-    "Discover premium vaping products with modern design and exceptional quality.",
+    "Discover premium products with modern design and exceptional quality.",
 };
 export default function RootLayout({
   children,

@@ -9,23 +9,27 @@ export default function HomeAboutSection() {
     {
       icon: Shield,
       title: "การรับประกันคุณภาพ",
-      description: "ทุกผลิตภัณฑ์ผ่านการทดสอบอย่างเข้มงวดเพื่อให้มั่นใจในมาตรฐานความปลอดภัยและประสิทธิภาพสูงสุด"
+      description:
+        "ทุกผลิตภัณฑ์ผ่านการทดสอบอย่างเข้มงวดเพื่อให้มั่นใจในมาตรฐานความปลอดภัยและประสิทธิภาพสูงสุด",
     },
     {
       icon: Users,
       title: "ชุมชนเป็นที่หนึ่ง",
-      description: "สร้างโดยผู้สูบไอเพื่อผู้สูบไอ ความคิดเห็นของคุณเป็นตัวกำหนดผลิตภัณฑ์และบริการของเรา"
+      description:
+        "สร้างโดยผู้สูบไอเพื่อผู้สูบไอ ความคิดเห็นของคุณเป็นตัวกำหนดผลิตภัณฑ์และบริการของเรา",
     },
     {
       icon: Award,
       title: "ผู้นำด้านนวัตกรรม",
-      description: "เป็นผู้นำด้านเทคโนโลยีการสูบไอล่าสุดด้วยการออกแบบและคุณสมบัติที่ทันสมัย"
+      description:
+        "เป็นผู้นำด้านเทคโนโลยีการสูบไอล่าสุดด้วยการออกแบบและคุณสมบัติที่ทันสมัย",
     },
     {
       icon: Heart,
       title: "การดูแลลูกค้า",
-      description: "ทีมสนับสนุนเฉพาะพร้อมช่วยเหลือคุณในการค้นหาโซลูชันการสูบไอที่สมบูรณ์แบบ"
-    }
+      description:
+        "ทีมสนับสนุนเฉพาะพร้อมช่วยเหลือคุณในการค้นหาโซลูชันการสูบไอที่สมบูรณ์แบบ",
+    },
   ];
 
   return (
@@ -43,7 +47,7 @@ export default function HomeAboutSection() {
             เรื่องราวของเรา
           </div>
           <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-6">
-            เกี่ยวกับ VAPE LIFE
+            เกี่ยวกับ podzoon
           </h2>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
             สร้างประสบการณ์การสูบไอพรีเมียมสำหรับไลฟ์สไตล์สมัยใหม่ด้วยนวัตกรรม
@@ -62,14 +66,20 @@ export default function HomeAboutSection() {
           >
             <div className="prose prose-lg dark:prose-invert max-w-none">
               <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-                ก่อตั้งขึ้นด้วยความหลงใหลในนวัตกรรมและคุณภาพ <strong className="text-blue-600 dark:text-blue-400">VAPE LIFE</strong> แสดงถึงจุดสูงสุดของเทคโนโลยีการสูบไอ
+                ก่อตั้งขึ้นด้วยความหลงใหลในนวัตกรรมและคุณภาพ{" "}
+                <strong className="text-blue-600 dark:text-blue-400">
+                  podzoon
+                </strong>{" "}
+                แสดงถึงจุดสูงสุดของนวัตกรรมและการออกแบบ
                 เราเชื่อในการมอบประสบการณ์ที่ดีที่สุดให้กับลูกค้าของเรา
                 ผ่านผลิตภัณฑ์ที่ทันสมัยและบริการที่ยอดเยี่ยม
               </p>
               <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
-                การเดินทางของเราเริ่มต้นด้วยภารกิจที่เรียบง่าย: สร้างผลิตภัณฑ์การสูบไอที่ไม่เพียงแต่ทำงานได้อย่างยอดเยี่ยม
-                แต่ยังช่วยยกระดับประสบการณ์การสูบไอโดยรวม การตัดสินใจทุกอย่างของเราได้รับคำแนะนำจากความมุ่งมั่นใน
-                คุณภาพ ความปลอดภัย และความพึงพอใจของลูกค้า
+                การเดินทางของเราเริ่มต้นด้วยภารกิจที่เรียบง่าย:
+                สร้างผลิตภัณฑ์การสูบไอที่ไม่เพียงแต่ทำงานได้อย่างยอดเยี่ยม
+                แต่ยังช่วยยกระดับประสบการณ์การสูบไอโดยรวม
+                การตัดสินใจทุกอย่างของเราได้รับคำแนะนำจากความมุ่งมั่นใน คุณภาพ
+                ความปลอดภัย และความพึงพอใจของลูกค้า
               </p>
             </div>
 
@@ -83,9 +93,12 @@ export default function HomeAboutSection() {
               <div className="flex items-start gap-4">
                 <Target className="w-8 h-8 text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">ภารกิจของเรา</h3>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    ภารกิจของเรา
+                  </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    เพื่อเสริมพลังผู้สูบไอทั่วโลกด้วยผลิตภัณฑ์พรีเมียม คำแนะนำจากผู้เชี่ยวชาญ และชุมชนที่เฉลิมฉลอง
+                    เพื่อเสริมพลังผู้สูบไอทั่วโลกด้วยผลิตภัณฑ์พรีเมียม
+                    คำแนะนำจากผู้เชี่ยวชาญ และชุมชนที่เฉลิมฉลอง
                     ศิลปะแห่งการสูบไอ
                   </p>
                 </div>
@@ -103,7 +116,9 @@ export default function HomeAboutSection() {
             <div className="relative bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-2xl p-8 text-white overflow-hidden">
               <div className="absolute inset-0 bg-black/20"></div>
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold mb-4">ทำไมต้องเลือก VAPE LIFE?</h3>
+                <h3 className="text-2xl font-bold mb-4">
+                  ทำไมต้องเลือก podzoon?
+                </h3>
                 <ul className="space-y-3 text-blue-50">
                   <li className="flex items-center gap-3">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -173,7 +188,10 @@ export default function HomeAboutSection() {
             เข้าร่วมกับเราในการยอมรับไลฟ์สไตล์ที่ทั้งทันสมัยและมีสติ
           </p>
           <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
-            ยินดีต้อนรับสู่ <span className="text-blue-600 dark:text-blue-400 font-semibold">VAPE LIFE</span>
+            ยินดีต้อนรับสู่{" "}
+            <span className="text-blue-600 dark:text-blue-400 font-semibold">
+              podzoon
+            </span>
           </p>
         </motion.div>
       </div>

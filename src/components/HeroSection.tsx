@@ -13,9 +13,9 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-lime-400 via-green-400 to-lime-600 bg-clip-text text-transparent mb-6 gradient-text"
-          style={{ textShadow: '0 0 20px rgba(0, 255, 0, 0.5)' }}
+          style={{ textShadow: "0 0 20px rgba(0, 255, 0, 0.5)" }}
         >
-          VAPE LIFE
+          podzoon
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 50 }}
@@ -23,7 +23,7 @@ export default function HeroSection() {
           transition={{ duration: 1, delay: 0.2 }}
           className="text-xl md:text-2xl text-gray-300 mb-8"
         >
-          ประสบการณ์การสูบไอพรีเมียมสำหรับไลฟ์สไตล์สมัยใหม่
+          Premium experience for modern lifestyle
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 50 }}

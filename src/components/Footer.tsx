@@ -2,7 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { MessageCircle, Phone, Mail, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
+import {
+  MessageCircle,
+  Phone,
+  Mail,
+  MapPin,
+  Instagram,
+  Facebook,
+  Twitter,
+} from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,26 +20,36 @@ export default function Footer() {
       { name: "เกี่ยวกับเรา", href: "/about" },
       { name: "ติดต่อเรา", href: "/contact" },
       { name: "นโยบายความเป็นส่วนตัว", href: "/privacy" },
-      { name: "เงื่อนไขการใช้งาน", href: "/terms" }
+      { name: "เงื่อนไขการใช้งาน", href: "/terms" },
     ],
     products: [
       { name: "สินค้าทั้งหมด", href: "/products" },
       { name: "หมวดหมู่", href: "/categories" },
       { name: "สินค้าใหม่", href: "/products?filter=new" },
-      { name: "โปรโมชั่น", href: "/products?filter=promo" }
+      { name: "โปรโมชั่น", href: "/products?filter=promo" },
     ],
     support: [
       { name: "คำถามที่พบบ่อย", href: "/faq" },
       { name: "การจัดส่ง", href: "/shipping" },
       { name: "การคืนสินค้า", href: "/returns" },
-      { name: "การสนับสนุน", href: "/support" }
-    ]
+      { name: "การสนับสนุน", href: "/support" },
+    ],
   };
 
   const socialLinks = [
-    { name: "Facebook", icon: Facebook, href: "#", color: "hover:text-blue-500" },
-    { name: "Instagram", icon: Instagram, href: "#", color: "hover:text-pink-500" },
-    { name: "Twitter", icon: Twitter, href: "#", color: "hover:text-blue-400" }
+    {
+      name: "Facebook",
+      icon: Facebook,
+      href: "#",
+      color: "hover:text-blue-500",
+    },
+    {
+      name: "Instagram",
+      icon: Instagram,
+      href: "#",
+      color: "hover:text-pink-500",
+    },
+    { name: "Twitter", icon: Twitter, href: "#", color: "hover:text-blue-400" },
   ];
 
   return (
@@ -52,9 +70,10 @@ export default function Footer() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <h3 className="text-2xl font-bold text-lime-400 mb-4">VAPE LIFE</h3>
+            <h3 className="text-2xl font-bold text-lime-400 mb-4">podzoon</h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
-              พิสูจน์ประสบการณ์การสูบไอระดับพรีเมียมด้วยเทคโนโลยีล้ำสมัยและคุณภาพที่เหนือกว่า
+              Discover premium products with modern design and exceptional
+              quality at podzoon.
             </p>
 
             {/* Contact info */}
@@ -65,11 +84,15 @@ export default function Footer() {
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-4 h-4 text-lime-400 flex-shrink-0" />
-                <span className="text-sm text-gray-300">support@vapelife.com</span>
+                <span className="text-sm text-gray-300">
+                  support@podzoon.com
+                </span>
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="w-4 h-4 text-lime-400 flex-shrink-0" />
-                <span className="text-sm text-gray-300">กรุงเทพฯ ประเทศไทย</span>
+                <span className="text-sm text-gray-300">
+                  กรุงเทพฯ ประเทศไทย
+                </span>
               </div>
             </div>
           </motion.div>
@@ -125,7 +148,9 @@ export default function Footer() {
             transition={{ duration: 0.6, delay: 0.3 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold mb-4 text-white">การสนับสนุน</h4>
+            <h4 className="text-lg font-semibold mb-4 text-white">
+              การสนับสนุน
+            </h4>
             <ul className="space-y-2">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
@@ -168,8 +193,12 @@ export default function Footer() {
         >
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="mb-4 md:mb-0">
-              <h4 className="text-lg font-semibold mb-2 text-white">รับข่าวสารและโปรโมชั่น</h4>
-              <p className="text-gray-300 text-sm">สมัครรับข่าวสารเพื่อรับข้อมูลสินค้าใหม่และส่วนลดพิเศษ</p>
+              <h4 className="text-lg font-semibold mb-2 text-white">
+                รับข่าวสารและโปรโมชั่น
+              </h4>
+              <p className="text-gray-300 text-sm">
+                สมัครรับข่าวสารเพื่อรับข้อมูลสินค้าใหม่และส่วนลดพิเศษ
+              </p>
             </div>
             <div className="flex w-full md:w-auto">
               <input
@@ -194,10 +223,13 @@ export default function Footer() {
         >
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="text-gray-400 text-sm mb-4 md:mb-0">
-              © {currentYear} VAPE LIFE. สงวนลิขสิทธิ์ทั้งหมด.
+              © {currentYear} podzoon. สงวนลิขสิทธิ์ทั้งหมด.
             </div>
             <div className="flex items-center space-x-6">
-              <Link href="/admin" className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors">
+              <Link
+                href="/admin"
+                className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors"
+              >
                 Admin Panel
               </Link>
               <div className="text-gray-500 text-sm">

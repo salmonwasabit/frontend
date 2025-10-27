@@ -2,7 +2,15 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { MessageCircle, Clock, MapPin, Phone, Mail, ArrowRight, Sparkles } from "lucide-react";
+import {
+  MessageCircle,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
+  ArrowRight,
+  Sparkles,
+} from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -15,7 +23,7 @@ export default function HomeContactSection() {
       action: "แชทเลย",
       href: "#", // This would be the LINE URL
       primary: true,
-      color: "from-green-500 to-green-600"
+      color: "from-green-500 to-green-600",
     },
     {
       icon: Phone,
@@ -24,7 +32,7 @@ export default function HomeContactSection() {
       action: "โทรเลย",
       href: "tel:+1234567890",
       primary: false,
-      color: "from-blue-500 to-blue-600"
+      color: "from-blue-500 to-blue-600",
     },
     {
       icon: Mail,
@@ -33,8 +41,8 @@ export default function HomeContactSection() {
       action: "ส่งอีเมล",
       href: "mailto:support@vapelife.com",
       primary: false,
-      color: "from-purple-500 to-purple-600"
-    }
+      color: "from-purple-500 to-purple-600",
+    },
   ];
 
   return (
@@ -77,9 +85,13 @@ export default function HomeContactSection() {
               whileHover={{ y: -5 }}
               className="group"
             >
-              <Card className={`h-full border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 bg-white/10 backdrop-blur-sm border-white/20 ${method.primary ? 'ring-2 ring-green-400/50' : ''}`}>
+              <Card
+                className={`h-full border-0 shadow-2xl hover:shadow-3xl transition-all duration-300 bg-white/10 backdrop-blur-sm border-white/20 ${method.primary ? "ring-2 ring-green-400/50" : ""}`}
+              >
                 <CardContent className="p-8 text-center">
-                  <div className={`w-16 h-16 bg-gradient-to-r ${method.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  <div
+                    className={`w-16 h-16 bg-gradient-to-r ${method.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                  >
                     <method.icon className="w-8 h-8 text-white" />
                   </div>
                   <h3 className="text-2xl font-bold text-white mb-3">
@@ -92,8 +104,8 @@ export default function HomeContactSection() {
                     <Button
                       className={`w-full font-semibold py-3 text-lg rounded-xl transition-all duration-300 transform hover:scale-105 ${
                         method.primary
-                          ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg shadow-green-500/25'
-                          : 'bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm'
+                          ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg shadow-green-500/25"
+                          : "bg-white/20 hover:bg-white/30 text-white border border-white/30 backdrop-blur-sm"
                       }`}
                     >
                       {method.action}
@@ -119,22 +131,39 @@ export default function HomeContactSection() {
               <h3 className="text-2xl font-bold text-white">เวลาทำการ</h3>
             </div>
             <div className="space-y-2 text-gray-300">
-              <p><span className="font-semibold text-white">วันจันทร์ - วันศุกร์:</span> 10:00 น. - 18:00 น.</p>
-              <p><span className="font-semibold text-white">วันเสาร์:</span> 10:00 น. - 16:00 น.</p>
-              <p><span className="font-semibold text-white">วันอาทิตย์:</span> ปิดทำการ</p>
+              <p>
+                <span className="font-semibold text-white">
+                  วันจันทร์ - วันศุกร์:
+                </span>{" "}
+                10:00 น. - 18:00 น.
+              </p>
+              <p>
+                <span className="font-semibold text-white">วันเสาร์:</span>{" "}
+                10:00 น. - 16:00 น.
+              </p>
+              <p>
+                <span className="font-semibold text-white">วันอาทิตย์:</span>{" "}
+                ปิดทำการ
+              </p>
             </div>
           </div>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <div className="flex items-center gap-4 mb-4">
               <MapPin className="w-8 h-8 text-purple-400" />
-              <h3 className="text-2xl font-bold text-white">เยี่ยมชมร้านของเรา</h3>
+              <h3 className="text-2xl font-bold text-white">
+                เยี่ยมชมร้านของเรา
+              </h3>
             </div>
             <div className="text-gray-300">
-              <p className="font-semibold text-white mb-2">ร้าน VAPE LIFE</p>
-              <p>123 ถนนสูบไอ<br />
-              เมืองสูบไอ, ประเทศไทย 12345<br />
-              ประเทศไทย</p>
+              <p className="font-semibold text-white mb-2">ร้าน podzoon</p>
+              <p>
+                123 ถนนสูบไอ
+                <br />
+                เมืองสูบไอ, ประเทศไทย 12345
+                <br />
+                ประเทศไทย
+              </p>
             </div>
           </div>
         </motion.div>
