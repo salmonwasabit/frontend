@@ -5,6 +5,7 @@ import "./globals.css";
 import ClientHeader from "@/components/ClientHeader";
 import Footer from "@/components/Footer";
 import GSAPAnimations from "@/components/GSAPAnimations";
+import LineButton from "@/components/LineButton";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,7 +19,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "VAPE LIFE - Premium Vaping Experience",
-  description: "Discover premium vaping products with modern design and exceptional quality.",
+  description:
+    "Discover premium vaping products with modern design and exceptional quality.",
 };
 export default function RootLayout({
   children,
@@ -33,10 +35,9 @@ export default function RootLayout({
         <AuthProvider>
           <ClientHeader />
           <GSAPAnimations />
-          <main className="pt-16">
-            {children}
-          </main>
+          <main className="pt-16">{children}</main>
           <Footer />
+          <LineButton sticky />
         </AuthProvider>
       </body>
     </html>

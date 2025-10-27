@@ -5,7 +5,11 @@ import { useState } from "react";
 // Extend window interface for gtag
 declare global {
   interface Window {
-    gtag?: (command: string, targetId: string, config?: Record<string, unknown>) => void;
+    gtag?: (
+      command: string,
+      targetId: string,
+      config?: Record<string, unknown>,
+    ) => void;
   }
 }
 
@@ -14,6 +18,7 @@ interface LineButtonProps {
   productId?: string;
   price?: number;
   variant?: "primary" | "secondary";
+  sticky?: boolean;
   className?: string;
 }
 
@@ -22,9 +27,11 @@ export default function LineButton({
   productId,
   price,
   variant = "primary",
+  sticky = false,
   className = "",
 }: LineButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const lineId = "@rwqrqwas"; // Replace with actual LINE ID
 
   const handleLineClick = () => {
     setIsLoading(true);
@@ -38,8 +45,11 @@ export default function LineButton({
       });
     }
 
-    const userAgent = navigator.userAgent || navigator.vendor || (window as Window & { opera?: string }).opera || "";
-    const lineId = "@YOUR_LINE_ID"; // Replace with actual LINE ID
+    const userAgent =
+      navigator.userAgent ||
+      navigator.vendor ||
+      (window as Window & { opera?: string }).opera ||
+      "";
     const lineScheme = `line://ti/p/${lineId}`;
 
     // Prefilled message
@@ -68,10 +78,13 @@ export default function LineButton({
     setTimeout(() => setIsLoading(false), 1000);
   };
 
-  const baseClasses = "inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors";
-  const variantClasses = variant === "primary"
-    ? "bg-green-500 text-white hover:bg-green-600"
-    : "bg-blue-500 text-white hover:bg-blue-600";
+  const baseClasses = sticky
+    ? "fixed bottom-4 right-4 z-50 flex items-center gap-2 px-4 py-2 rounded-full font-semibold transition-colors shadow-lg"
+    : "inline-flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors";
+  const variantClasses =
+    variant === "primary"
+      ? "bg-green-500 text-white hover:bg-green-600"
+      : "bg-blue-500 text-white hover:bg-blue-600";
 
   return (
     <button
@@ -80,9 +93,13 @@ export default function LineButton({
       className={`${baseClasses} ${variantClasses} ${className} ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
     >
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
       </svg>
-      {isLoading ? "Opening LINE..." : "สั่งซื้อผ่าน LINE"}
+      {isLoading
+        ? "Opening LINE..."
+        : sticky
+          ? `Line: ${lineId}`
+          : "สั่งซื้อผ่าน LINE"}
     </button>
   );
 }

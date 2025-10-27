@@ -27,7 +27,7 @@ export default function HighlightsSection() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/products');
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/products`);
         if (response.ok) {
           const data = await response.json();
           // Get first 3 products or fallback to sample data

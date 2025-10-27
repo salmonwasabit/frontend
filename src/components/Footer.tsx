@@ -2,11 +2,9 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useAuth } from "@/lib/AuthContext";
 import { MessageCircle, Phone, Mail, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
 
 export default function Footer() {
-  const { isLoggedIn } = useAuth();
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
@@ -199,11 +197,9 @@ export default function Footer() {
               © {currentYear} VAPE LIFE. สงวนลิขสิทธิ์ทั้งหมด.
             </div>
             <div className="flex items-center space-x-6">
-              {isLoggedIn && (
-                <Link href="/admin" className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors">
-                  Admin Panel
-                </Link>
-              )}
+              <Link href="/admin" className="text-orange-400 hover:text-orange-300 text-sm font-medium transition-colors">
+                Admin Panel
+              </Link>
               <div className="text-gray-500 text-sm">
                 Made with ❤️ for vaping enthusiasts
               </div>
