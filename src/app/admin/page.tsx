@@ -7,7 +7,6 @@ import { useAuth } from '@/lib/AuthContext';
 import AdminRoute from '@/components/AdminRoute';
 import Link from 'next/link';
 import {
-  LayoutDashboard,
   Plus,
   Search,
   Edit,
@@ -132,14 +131,14 @@ export default function AdminPage() {
     icon: LucideIcon;
     color: string;
   }) => (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <div className="bg-card border border-border rounded-xl shadow-sm p-6 hover:shadow-lg transition-shadow">
       <div className="flex items-center">
-        <div className={cn("p-3 rounded-lg", color)}>
+        <div className={cn("p-3 rounded-xl", color)}>
           <Icon className="h-6 w-6 text-white" />
         </div>
         <div className="ml-4">
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-2xl font-bold text-card-foreground">{value}</p>
         </div>
       </div>
     </div>
@@ -148,10 +147,10 @@ export default function AdminPage() {
   if (loading) {
     return (
       <AdminRoute>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">กำลังโหลดแดชบอร์ด...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">กำลังโหลดแดชบอร์ด...</p>
           </div>
         </div>
       </AdminRoute>
@@ -161,17 +160,17 @@ export default function AdminPage() {
   if (error) {
     return (
       <AdminRoute>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md">
-              <div className="text-red-600 mb-4">
+            <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 max-w-md">
+              <div className="text-destructive mb-4">
                 <X className="h-12 w-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-medium text-red-900 mb-2">เกิดข้อผิดพลาดในการโหลดแดชบอร์ด</h3>
-              <p className="text-red-700 mb-4">{error}</p>
+              <h3 className="text-base font-medium text-destructive mb-2">เกิดข้อผิดพลาดในการโหลดแดชบอร์ด</h3>
+              <p className="text-destructive/80 mb-4">{error}</p>
               <button
                 onClick={fetchProducts}
-                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+                className="bg-destructive text-destructive-foreground px-4 py-2 rounded-xl hover:bg-destructive/90 transition-colors"
               >
                 ลองใหม่
               </button>
@@ -184,56 +183,79 @@ export default function AdminPage() {
 
   return (
     <AdminRoute>
-      <div className="min-h-screen bg-gray-50 flex">
+      <div className="min-h-screen bg-background flex">
         {/* Mobile sidebar overlay */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
             onClick={() => setSidebarOpen(false)}
           />
         )}
 
         {/* Sidebar */}
         <div className={cn(
-          "fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}>
           <div className="flex flex-col h-full">
             {/* Logo */}
-            <div className="flex items-center justify-center h-16 px-4 bg-indigo-600">
-              <h1 className="text-xl font-bold text-white">แผงควบคุมผู้ดูแลระบบ</h1>
+            <div className="flex items-center justify-center h-16 px-4 bg-primary border-b border-border">
+              <h1 className="text-m font-semibold text-primary-foreground">แผงควบคุมผู้ดูแลระบบ</h1>
             </div>
 
             {/* Navigation */}
             <nav className="flex-1 px-4 py-6 space-y-2">
               <Link
                 href="/admin"
-                className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors bg-gray-100"
+                className="flex items-center px-4 py-3 text-foreground rounded-xl hover:bg-accent transition-colors bg-accent"
               >
                 <Package className="h-5 w-5 mr-3" />
                 จัดการสินค้า
               </Link>
               <Link
                 href="/admin/categories"
-                className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
               >
                 <Tag className="h-5 w-5 mr-3" />
                 จัดการหมวดหมู่
               </Link>
               <Link
                 href="/admin/products/new"
-                className="flex items-center px-4 py-3 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
               >
                 <Plus className="h-5 w-5 mr-3" />
                 เพิ่มสินค้า
               </Link>
+              <button
+                onClick={async () => {
+                  if (confirm('คุณต้องการเพิ่มข้อมูลสินค้าตัวอย่างหรือไม่? ข้อมูลเดิมจะถูกลบ')) {
+                    try {
+                      const response = await fetch(`${API_BASE_URL}/api/populate`, {
+                        method: 'POST',
+                      });
+                      if (response.ok) {
+                        alert('เพิ่มข้อมูลสินค้าตัวอย่างสำเร็จ!');
+                        fetchProducts(); // Refresh the products list
+                      } else {
+                        alert('เกิดข้อผิดพลาดในการเพิ่มข้อมูล');
+                      }
+                    } catch (err) {
+                      alert('เกิดข้อผิดพลาดในการเชื่อมต่อ');
+                    }
+                  }
+                }}
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <Package className="h-5 w-5 mr-3" />
+                เติมข้อมูลตัวอย่าง
+              </button>
             </nav>
 
             {/* Logout */}
-            <div className="p-4 border-t">
+            <div className="p-4 border-t border-border">
               <button
                 onClick={handleLogout}
-                className="flex items-center w-full px-4 py-3 text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                className="flex items-center w-full px-4 py-3 text-destructive rounded-xl hover:bg-destructive/10 transition-colors"
               >
                 <LogOut className="h-5 w-5 mr-3" />
                 ออกจากระบบ
@@ -245,18 +267,18 @@ export default function AdminPage() {
         {/* Main content */}
         <div className="flex-1 min-w-0">
           {/* Top bar */}
-          <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-4 lg:px-8">
+          <div className="bg-card border-b border-border px-4 py-4 lg:px-8 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="lg:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+                  className="lg:hidden p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 >
                   <BarChart3 className="h-6 w-6" />
                 </button>
-                <h1 className="text-2xl font-bold text-gray-900">แดชบอร์ด</h1>
+                <h1 className="text-xl font-semibold text-card-foreground">แดชบอร์ด</h1>
               </div>
-              <div className="text-sm text-gray-500">
+              <div className="text-sm text-muted-foreground">
                 ยินดีต้อนรับกลับ, ผู้ดูแลระบบ
               </div>
             </div>
@@ -269,7 +291,7 @@ export default function AdminPage() {
                 title="สินค้าทั้งหมด"
                 value={stats.totalProducts}
                 icon={Package}
-                color="bg-blue-600"
+                color="bg-primary"
               />
               <StatCard
                 title="หมวดหมู่"
@@ -292,29 +314,29 @@ export default function AdminPage() {
             </div>
 
             {/* Products Section */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-              <div className="px-6 py-4 border-b border-gray-200">
+            <div className="bg-card border border-border rounded-xl shadow-sm">
+              <div className="px-6 py-4 border-b border-border">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-4 sm:mb-0">สินค้า</h2>
+                  <h2 className="text-lg font-medium text-card-foreground mb-4 sm:mb-0">สินค้า</h2>
 
                   {/* Search and Filter */}
                   <div className="flex flex-col sm:flex-row gap-4">
                     <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <input
                         type="text"
                         placeholder="ค้นหาสินค้า..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 w-full sm:w-64"
+                        className="pl-10 pr-4 py-2 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-full sm:w-64"
                       />
                     </div>
                     <div className="relative">
-                      <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <select
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        className="pl-10 pr-4 py-2 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                       >
                         <option value="all">หมวดหมู่ทั้งหมด</option>
                         {categories.map(category => (
@@ -328,11 +350,11 @@ export default function AdminPage() {
 
               {filteredProducts.length === 0 ? (
                 <div className="p-12 text-center">
-                  <Package className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  <Package className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-base font-medium text-card-foreground mb-2">
                     {products.length === 0 ? 'ยังไม่มีสินค้า' : 'ไม่พบสินค้า'}
                   </h3>
-                  <p className="text-gray-500 mb-6">
+                  <p className="text-muted-foreground mb-6">
                     {products.length === 0
                       ? 'เริ่มต้นโดยการเพิ่มสินค้าชิ้นแรกของคุณ'
                       : 'ลองปรับการค้นหาหรือเงื่อนไขการกรอง'
@@ -341,7 +363,7 @@ export default function AdminPage() {
                   {products.length === 0 && (
                     <Link
                       href="/admin/products/new"
-                      className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
                     >
                       <Plus className="h-4 w-4 mr-2" />
                       เพิ่มสินค้า
@@ -350,59 +372,59 @@ export default function AdminPage() {
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-border">
+                    <thead className="bg-muted/50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           สินค้า
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           หมวดหมู่
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           ราคา
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           สร้างเมื่อ
                         </th>
-                        <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                           การดำเนินการ
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="bg-card divide-y divide-border">
                       {filteredProducts.map((product) => (
-                        <tr key={product.id} className="hover:bg-gray-50">
+                        <tr key={product.id} className="hover:bg-muted/50 transition-colors">
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div>
-                              <div className="text-sm font-medium text-gray-900">{product.name}</div>
-                              <div className="text-sm text-gray-500 line-clamp-1 max-w-xs">
+                              <div className="text-sm font-medium text-card-foreground">{product.name}</div>
+                              <div className="text-sm text-muted-foreground line-clamp-1 max-w-xs">
                                 {product.description || 'ไม่มีคำอธิบาย'}
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="inline-flex px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+                            <span className="inline-flex px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-full">
                               {product.category || 'ไม่ได้จัดหมวดหมู่'}
                             </span>
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-card-foreground">
                             {`$${product.price.toFixed(2)}`}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                             {new Date(product.created_at).toLocaleDateString()}
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                             <div className="flex justify-end gap-2">
                               <Link
                                 href={`/admin/products/${product.id}/edit`}
-                                className="text-indigo-600 hover:text-indigo-900 p-2 rounded-lg hover:bg-indigo-50 transition-colors"
+                                className="text-primary hover:text-primary/80 p-2 rounded-xl hover:bg-primary/10 transition-colors"
                               >
                                 <Edit className="h-4 w-4" />
                               </Link>
                               <button
                                 onClick={() => deleteProduct(product.id)}
-                                className="text-red-600 hover:text-red-900 p-2 rounded-lg hover:bg-red-50 transition-colors"
+                                className="text-destructive hover:text-destructive/80 p-2 rounded-xl hover:bg-destructive/10 transition-colors"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>

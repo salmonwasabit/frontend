@@ -56,7 +56,7 @@ export default function HighlightsSection() {
 
   if (loading) {
     return (
-      <section className="py-20 px-4 bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">
+      <section className="py-20 px-4 bg-background">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-64 mx-auto mb-4 animate-pulse"></div>
@@ -78,7 +78,7 @@ export default function HighlightsSection() {
   }
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-slate-50 to-gray-100 dark:from-slate-900 dark:to-slate-800">
+    <section className="py-20 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -91,10 +91,10 @@ export default function HighlightsSection() {
             <TrendingUp className="w-4 h-4" />
             เทรนด์เดอร์ตอนนี้
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
             สินค้ายอดนิยม
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             ค้นพบสินค้าการสูบไอที่ชุมชนของเราชื่นชอบมากที่สุด
             ที่ได้รับการคัดสรรอย่างพิถีพิถันเพื่อคุณภาพและประสิทธิภาพที่ยอดเยี่ยม
           </p>
@@ -111,7 +111,7 @@ export default function HighlightsSection() {
               whileHover={{ y: -5 }}
               className="group"
             >
-              <Card className="h-full overflow-hidden border-0 shadow-lg hover:shadow-2xl transition-all duration-300 bg-white dark:bg-slate-800 group-hover:shadow-blue-500/10">
+              <Card className="h-full overflow-hidden border border-border shadow-lg hover:shadow-2xl transition-all duration-300 bg-card group-hover:shadow-primary/10">
                 <CardHeader className="p-0 relative">
                   {/* Product Image Placeholder with gradient */}
                   <div className="relative w-full h-48 bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 rounded-t-lg flex items-center justify-center overflow-hidden">
@@ -141,7 +141,7 @@ export default function HighlightsSection() {
                     <p className="text-sm text-blue-600 dark:text-blue-400 font-medium mb-1">
                       {product.brand}
                     </p>
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-xl font-bold text-card-foreground group-hover:text-primary transition-colors">
                       {product.name}
                     </h3>
                   </div>
@@ -158,7 +158,7 @@ export default function HighlightsSection() {
                     </Badge>
                   </div>
 
-                  <div className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  <div className="text-2xl font-bold text-card-foreground mb-4">
                     ${product.price}
                   </div>
                 </CardContent>

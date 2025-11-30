@@ -58,10 +58,12 @@ export default function CategoriesContent() {
   // Helper functions for category descriptions and icons
   const getCategoryDescription = (categoryName: string): string => {
     const descriptions: Record<string, string> = {
+      'Esko Switch': 'Esko Bar Switch - Starter Kit และ Cartridge หลากหลายรสชาติ',
+      'Pikka Pod': 'Pikka Pod - ระบบ Pod ปิดพร้อมรสชาติพรีเมียม',
+      'Vortex Pro': 'Vortex Pro - อุปกรณ์สูบไอระดับพรีเมียม',
       'Starter Kit': 'เหมาะสำหรับผู้เริ่มต้นที่ต้องการเริ่มต้นการเดินทางสูบไอ',
       'Device': 'อุปกรณ์การสูบไอขั้นสูงพร้อมคุณสมบัติพรีเมียม',
       'Pod': 'ระบบพอตที่กะทัดรัดและสะดวกสำหรับการสูบไอแบบพกพา',
-      'game': 'สินค้าการสูบไอธีมเกม',
       'Accessories': 'อุปกรณ์และอะไหล่การสูบไอที่จำเป็น'
     };
     return descriptions[categoryName] || `สินค้าการสูบไอประเภท ${categoryName}`;
@@ -69,10 +71,12 @@ export default function CategoriesContent() {
 
   const getCategoryIcon = (categoryName: string): string => {
     const icons: Record<string, string> = {
+      'Esko Switch': '🚀',
+      'Pikka Pod': '📱',
+      'Vortex Pro': '⚡',
       'Starter Kit': '🚀',
       'Device': '⚡',
       'Pod': '📱',
-      'game': '🎮',
       'Accessories': '🔧'
     };
     return icons[categoryName] || '📦';
@@ -112,12 +116,12 @@ export default function CategoriesContent() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <section className="py-16 px-4 bg-card">
+      <section className="py-16 px-4 bg-background">
         <div className="max-w-6xl mx-auto text-center">
           <motion.h1
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl font-bold mb-4 text-card-foreground"
+            className="text-5xl font-bold mb-4 text-foreground"
           >
             หมวดหมู่สินค้า
           </motion.h1>
@@ -151,14 +155,23 @@ export default function CategoriesContent() {
                     initial={{ opacity: 0, y: 50 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
-                    className="bg-card rounded-lg p-8 shadow-lg hover:shadow-xl transition-all hover:scale-105 cursor-pointer text-center"
+                    viewport={{ once: true }}
+                    className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                   >
-                    <div className="text-6xl mb-4">{category.icon}</div>
-                    <h3 className="text-2xl font-semibold mb-2 text-card-foreground">{category.name}</h3>
-                    <p className="text-muted-foreground mb-4">{category.description}</p>
-                    <div className="flex items-center justify-center gap-2 text-primary font-semibold">
-                      <span>{category.count} สินค้า</span>
-                      <i className="fas fa-arrow-right"></i>
+                    <div className="aspect-[4/3] bg-primary/10 flex items-center justify-center">
+                      <span className="text-6xl">
+                        {category.icon}
+                      </span>
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold mb-2 text-foreground">{category.name}</h3>
+                      <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{category.description}</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-muted-foreground">{category.count} สินค้า</span>
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
                     </div>
                   </motion.div>
                 </Link>

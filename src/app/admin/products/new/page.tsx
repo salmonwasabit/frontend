@@ -3,9 +3,12 @@
 import { useState } from 'react';
 import AdminRoute from '@/components/AdminRoute';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/lib/AuthContext';
 import Link from 'next/link';
 import ImageUpload from '@/components/ImageUpload';
 import { API_BASE_URL } from "@/lib/config";
+import { LayoutDashboard, Package, Tag, BarChart3, LogOut, Plus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface ImageData {
   id: number;
@@ -29,7 +32,9 @@ export default function NewProductPage() {
   const [uploadedImages, setUploadedImages] = useState<ImageData[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
+  const { logout } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -94,149 +99,242 @@ export default function NewProductPage() {
     'อื่นๆ'
   ];
 
+  const handleLogout = () => {
+    logout();
+    router.push('/admin/login');
+  };
+
   return (
     <AdminRoute>
-    <div className="min-h-screen bg-white">
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Header */}
-        <div className="bg-black text-white rounded-lg p-8 mb-8">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/admin"
-              className="text-white hover:text-gray-300 transition-colors"
-            >
-              <i className="fas fa-arrow-left"></i>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold">เพิ่มสินค้าใหม่</h1>
-              <p className="text-gray-300">สร้างสินค้าการสูบไอใหม่</p>
+      <div className="min-h-screen bg-background flex">
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Sidebar */}
+        <div className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+          <div className="flex flex-col h-full">
+            {/* Logo */}
+            <div className="flex items-center justify-center h-16 px-4 bg-primary border-b border-border">
+              <h1 className="text-lg font-semibold text-primary-foreground">แผงควบคุมผู้ดูแลระบบ</h1>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 px-4 py-6 space-y-2">
+              <Link
+                href="/admin"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <LayoutDashboard className="h-5 w-5 mr-3" />
+                แดชบอร์ด
+              </Link>
+              <Link
+                href="/admin/products"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <Package className="h-5 w-5 mr-3" />
+                จัดการสินค้า
+              </Link>
+              <Link
+                href="/admin/categories"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <Tag className="h-5 w-5 mr-3" />
+                จัดการหมวดหมู่
+              </Link>
+              <Link
+                href="/admin/products/new"
+                className="flex items-center px-4 py-3 text-foreground rounded-xl hover:bg-accent transition-colors bg-accent"
+              >
+                <Plus className="h-5 w-5 mr-3" />
+                เพิ่มสินค้า
+              </Link>
+            </nav>
+
+            {/* Logout */}
+            <div className="p-4 border-t border-border">
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-4 py-3 text-destructive rounded-xl hover:bg-destructive/10 transition-colors"
+              >
+                <LogOut className="h-5 w-5 mr-3" />
+                ออกจากระบบ
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Form */}
-        <div className="bg-white border border-gray-200 rounded-lg p-8">
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
-              {error}
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {/* Top bar */}
+          <div className="bg-card border-b border-border px-4 py-4 lg:px-8 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                >
+                  <BarChart3 className="h-6 w-6" />
+                </button>
+                <h1 className="text-xl font-semibold text-card-foreground ml-4 lg:ml-0">เพิ่มสินค้าใหม่</h1>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                ยินดีต้อนรับกลับ, ผู้ดูแลระบบ
+              </div>
             </div>
-          )}
+          </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                ชื่อสินค้า *
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent text-gray-900"
-                placeholder="ป้อนชื่อสินค้า"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
-                คำอธิบาย
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent text-gray-900"
-                placeholder="ป้อนคำอธิบายสินค้า"
-              />
+          <div className="p-4 lg:p-8">
+            {/* Header */}
+            <div className="mb-8">
+              <div className="flex items-center gap-4">
+                <Link
+                  href="/admin"
+                  className="text-muted-foreground hover:text-foreground p-2 rounded-xl hover:bg-accent transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </Link>
+                <div>
+                  <p className="text-muted-foreground">สร้างสินค้าการสูบไอใหม่</p>
+                </div>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700 mb-2">
-                ราคา *
-              </label>
-              <input
-                type="number"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.01"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent text-gray-900"
-                placeholder="0.00"
-              />
-            </div>
+          {/* Form */}
+          <div className="bg-card border border-border rounded-xl p-8">
+            {error && (
+              <div className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-xl text-destructive">
+                {error}
+              </div>
+            )}
 
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-                หมวดหมู่
-              </label>
-              <select
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black focus:border-transparent text-gray-900"
-              >
-                <option value="">เลือกหมวดหมู่</option>
-                {categories.map((category) => (
-                  <option key={category} value={category}>
-                    {category}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
+                  ชื่อสินค้า *
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="ป้อนชื่อสินค้า"
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                รูปภาพสินค้า
-              </label>
-              <ImageUpload
-                entityType="products"
-                onUploadSuccess={(imageData) => {
-                  setUploadedImages(prev => [...prev, imageData]);
-                }}
-                onUploadError={(error) => {
-                  setError(error);
-                }}
-              />
-            </div>
+              <div>
+                <label htmlFor="description" className="block text-sm font-medium text-foreground mb-2">
+                  คำอธิบาย
+                </label>
+                <textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  rows={4}
+                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  placeholder="ป้อนคำอธิบายสินค้า"
+                />
+              </div>
 
-            <div className="flex gap-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <i className="fas fa-spinner fa-spin"></i>
-                    กำลังสร้าง...
-                  </>
-                ) : (
-                  <>
-                    <i className="fas fa-plus"></i>
-                    สร้างสินค้า
-                  </>
-                )}
-              </button>
+              <div>
+                <label htmlFor="price" className="block text-sm font-medium text-foreground mb-2">
+                  ราคา *
+                </label>
+                <input
+                  type="number"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  min="0"
+                  step="0.01"
+                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="0.00"
+                />
+              </div>
 
-              <Link
-                href="/admin"
-                className="bg-white text-black border border-gray-300 px-6 py-3 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                ยกเลิก
-              </Link>
-            </div>
-          </form>
+              <div>
+                <label htmlFor="category" className="block text-sm font-medium text-foreground mb-2">
+                  หมวดหมู่
+                </label>
+                <select
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="">เลือกหมวดหมู่</option>
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  รูปภาพสินค้า
+                </label>
+                <ImageUpload
+                  entityType="products"
+                  onUploadSuccess={(imageData) => {
+                    setUploadedImages(prev => [...prev, imageData]);
+                  }}
+                  onUploadError={(error) => {
+                    setError(error);
+                  }}
+                />
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="bg-primary text-primary-foreground px-6 py-3 rounded-xl hover:bg-primary/90 transition-all duration-200 hover:shadow-lg hover:shadow-primary/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {loading ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"></div>
+                      กำลังสร้าง...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      สร้างสินค้า
+                    </>
+                  )}
+                </button>
+
+                <Link
+                  href="/admin"
+                  className="bg-muted text-muted-foreground px-6 py-3 rounded-xl hover:bg-muted/80 transition-colors"
+                >
+                  ยกเลิก
+                </Link>
+              </div>
+            </form>
+          </div>
+          </div>
         </div>
       </div>
-    </div>
     </AdminRoute>
   );
 }

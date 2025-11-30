@@ -31,7 +31,7 @@ export default function LineButton({
   className = "",
 }: LineButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const lineId = "@rwqrqwas"; // Replace with actual LINE ID
+  const lineId = "@podzone"; // PODZOON By Cake LINE ID
 
   const handleLineClick = () => {
     setIsLoading(true);

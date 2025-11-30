@@ -1,26 +1,22 @@
 import type { Metadata } from "next";
 import { AuthProvider } from "@/lib/AuthContext";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import ClientHeader from "@/components/ClientHeader";
 import Footer from "@/components/Footer";
 import GSAPAnimations from "@/components/GSAPAnimations";
 import LineButton from "@/components/LineButton";
+import AgeVerification from "@/components/AgeVerification";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
-  title: "podzoon",
+  title: "PODZOON By Cake",
   description:
-    "Discover premium products with modern design and exceptional quality.",
+    "เราเป็นร้านขายบุหรี่ไฟฟ้าที่มีหลากหลายยี่ห้อให้คุณเลือก มีบริการส่งด่วนในพื้นที่กรุงเทพทุกวัน และจัดส่งแบบพัสดุ จันทร์-เสาร์ มีการรับประกันสินค้า สั่งซื้อกับทางเราลูกค้ามั่นใจได้แน่นอนว่าจะได้รับของตามที่สั่ง ไม่มีเก็บเงินปลายทาง ไม่ขายให้เด็กต่ำกว่า 18 ปี",
 };
 export default function RootLayout({
   children,
@@ -28,11 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="th" className="dark">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} font-sans antialiased`}
       >
         <AuthProvider>
+          <AgeVerification />
           <ClientHeader />
           <GSAPAnimations />
           <main className="pt-16">{children}</main>

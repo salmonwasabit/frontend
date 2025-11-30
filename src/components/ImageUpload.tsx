@@ -109,7 +109,7 @@ export default function ImageUpload({
       ));
       onUploadError?.(errorMessage);
     }
-  }, [onUploadError, onUploadSuccess, entityId, entityType, API_BASE_URL]);
+  }, [onUploadError, onUploadSuccess, entityId, entityType]);
 
   const handleFiles = useCallback((files: FileList | null) => {
     if (!files) return;

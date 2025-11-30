@@ -20,10 +20,7 @@ import {
   Ruler,
   Award,
   CheckCircle,
-  ChevronLeft,
-  ChevronRight,
-  Eye,
-  ShoppingCart
+  Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,6 +52,7 @@ interface Product {
   in_stock?: boolean;
   rating?: number;
   review_count?: number;
+  image_url?: string;
   created_at: string;
   updated_at?: string;
 }
@@ -65,17 +63,8 @@ export default function ProductPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-
-  // Mock product images - in real app, these would come from API
-  const productImages = [
-    "/api/placeholder/600/600",
-    "/api/placeholder/600/600",
-    "/api/placeholder/600/600",
-    "/api/placeholder/600/600"
-  ];
+  const [shareClicked, setShareClicked] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -131,7 +120,7 @@ export default function ProductPage() {
       <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading product...</p>
+          <p className="text-muted-foreground">กำลังโหลดสินค้า...</p>
         </div>
       </div>
     );
@@ -144,20 +133,45 @@ export default function ProductPage() {
           <div className="text-red-500 mb-4">
             <i className="fas fa-exclamation-triangle text-4xl"></i>
           </div>
-          <h2 className="text-xl font-semibold mb-2">Product Not Found</h2>
+          <h2 className="text-xl font-semibold mb-2">ไม่พบสินค้า</h2>
           <p className="text-muted-foreground mb-4">{error}</p>
           <div className="space-x-4">
             <Button onClick={() => router.push("/products")} variant="outline">
-              Back to Products
+              กลับไปหน้ารายการสินค้า
             </Button>
             <Button onClick={() => window.location.reload()}>
-              Try Again
+              ลองใหม่
             </Button>
           </div>
         </div>
       </div>
     );
   }
+
+  const handleShare = async () => {
+    try {
+      const url = window.location.href;
+      await navigator.clipboard.writeText(url);
+      setShareClicked(true);
+      setTimeout(() => setShareClicked(false), 2000); // Reset after 2 seconds
+    } catch (err) {
+      console.error('Failed to copy URL:', err);
+      // Fallback for older browsers
+      const url = window.location.href;
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      document.body.appendChild(textArea);
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        setShareClicked(true);
+        setTimeout(() => setShareClicked(false), 2000);
+      } catch (fallbackErr) {
+        console.error('Fallback copy failed:', fallbackErr);
+      }
+      document.body.removeChild(textArea);
+    }
+  };
 
   if (!product) {
     return null;
@@ -166,12 +180,12 @@ export default function ProductPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Breadcrumb Navigation */}
-      <div className="border-b bg-card/50">
+      <div className="border-b bg-background">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <nav className="flex items-center space-x-2 text-sm text-muted-foreground">
-            <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
+            <Link href="/" className="hover:text-foreground transition-colors">หน้าแรก</Link>
             <span>/</span>
-            <Link href="/products" className="hover:text-foreground transition-colors">Products</Link>
+            <Link href="/products" className="hover:text-foreground transition-colors">สินค้า</Link>
             {product.category && (
               <>
                 <span>/</span>
@@ -198,9 +212,42 @@ export default function ProductPage() {
             >
               {/* Main Image */}
               <div className="aspect-square bg-muted rounded-xl overflow-hidden relative group">
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-muted-foreground text-lg">Product Image</span>
-                </div>
+                {product.image_url ? (
+                  <img
+                    src={product.image_url}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      // Fallback to placeholder if image fails to load
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                      const parent = target.parentElement;
+                      if (parent) {
+                        parent.innerHTML = `
+                          <div class="w-full h-full flex items-center justify-center">
+                            <div class="text-center">
+                              <div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mb-2 mx-auto">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star w-8 h-8 text-gray-500">
+                                  <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"></path>
+                                </svg>
+                              </div>
+                              <span class="text-sm text-gray-500 font-medium">รูปภาพสินค้า</span>
+                            </div>
+                          </div>
+                        `;
+                      }
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center mb-2 mx-auto">
+                        <Star className="w-8 h-8 text-gray-500" />
+                      </div>
+                      <span className="text-sm text-gray-500 font-medium">รูปภาพสินค้า</span>
+                    </div>
+                  </div>
+                )}
                 <Button
                   variant="secondary"
                   size="icon"
@@ -211,7 +258,8 @@ export default function ProductPage() {
                 </Button>
               </div>
 
-              {/* Thumbnail Images */}
+              {/* Thumbnail Images - Hidden for now since products have only one image */}
+              {/* Uncomment when adding multiple product images
               <div className="flex space-x-2 overflow-x-auto">
                 {productImages.map((_, index) => (
                   <button
@@ -227,6 +275,7 @@ export default function ProductPage() {
                   </button>
                 ))}
               </div>
+              */}
             </motion.div>
 
             {/* Product Information */}
@@ -241,11 +290,22 @@ export default function ProductPage() {
                   <div>
                     <h1 className="text-3xl font-bold text-foreground mb-2">{product.name}</h1>
                     {product.brand && (
-                      <p className="text-lg text-muted-foreground mb-2">by {product.brand}</p>
+                      <p className="text-lg text-muted-foreground mb-2">โดย {product.brand}</p>
                     )}
                   </div>
-                  <Button variant="ghost" size="icon">
-                    <Share2 className="h-4 w-4" />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleShare}
+                    className={`transition-colors relative ${shareClicked ? 'text-green-600' : ''}`}
+                    title={shareClicked ? 'คัดลอกลิงก์แล้ว!' : 'แชร์สินค้า'}
+                  >
+                    <Share2 className={`h-4 w-4 ${shareClicked ? 'scale-110' : ''} transition-transform`} />
+                    {shareClicked && (
+                      <span className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-green-600 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                        คัดลอกแล้ว!
+                      </span>
+                    )}
                   </Button>
                 </div>
 
@@ -264,17 +324,17 @@ export default function ProductPage() {
                     ))}
                   </div>
                   <span className="text-sm text-muted-foreground">
-                    {product.rating} ({product.review_count} reviews)
+                    {product.rating} ({product.review_count} รีวิว)
                   </span>
                 </div>
 
                 {/* Price */}
                 <div className="mb-4">
-                  <p className="text-4xl font-bold text-primary">${product.price.toFixed(2)}</p>
+                  <p className="text-4xl font-bold text-primary">฿{product.price.toFixed(2)}</p>
                   {product.in_stock && (
                     <Badge variant="secondary" className="mt-2">
                       <CheckCircle className="h-3 w-3 mr-1" />
-                      In Stock
+                      มีสินค้า
                     </Badge>
                   )}
                 </div>
@@ -283,82 +343,48 @@ export default function ProductPage() {
               {/* Quick Specs */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Quick Specifications</CardTitle>
+                  <CardTitle className="text-lg">ข้อมูลเบื้องต้น</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {product.product_type && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Type:</span>
+                      <span className="text-muted-foreground">ประเภท:</span>
                       <span className="font-medium">{product.product_type}</span>
                     </div>
                   )}
                   {product.nicotine_strength && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Nicotine:</span>
+                      <span className="text-muted-foreground">นิโคติน:</span>
                       <span className="font-medium">{product.nicotine_strength}</span>
                     </div>
                   )}
                   {product.battery_capacity && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Battery:</span>
+                      <span className="text-muted-foreground">แบตเตอรี่:</span>
                       <span className="font-medium">{product.battery_capacity}</span>
                     </div>
                   )}
                   {product.tank_capacity && (
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Tank:</span>
+                      <span className="text-muted-foreground">ถังน้ำยา:</span>
                       <span className="font-medium">{product.tank_capacity}</span>
                     </div>
                   )}
                 </CardContent>
               </Card>
 
-              {/* Quantity and Actions */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-4">
-                  <label className="text-sm font-medium">Quantity:</label>
-                  <div className="flex items-center border rounded-lg">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      disabled={quantity <= 1}
-                    >
-                      <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="flex space-x-3">
-                  <Button className="flex-1" size="lg">
-                    <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Cart
-                  </Button>
-                  <Button variant="outline" size="lg">
-                    <Heart className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
 
               {/* Contact Section */}
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center">
                     <Eye className="h-4 w-4 mr-2" />
-                    Interested in this product?
+                    สนใจสินค้านี้หรือไม่?
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-4">
-                    Contact us via LINE for more information, custom orders, or bulk pricing.
+                    ติดต่อเราได้ทาง LINE สำหรับข้อมูลเพิ่มเติม การสั่งทำพิเศษ หรือราคาส่ง
                   </p>
                   <LineButton
                     productName={product.name}
@@ -374,16 +400,16 @@ export default function ProductPage() {
           {/* Detailed Information Tabs */}
           <Tabs defaultValue="specifications" className="w-full">
             <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="description">Description</TabsTrigger>
-              <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              <TabsTrigger value="shipping">Shipping</TabsTrigger>
+              <TabsTrigger value="specifications">ข้อมูลจำเพาะ</TabsTrigger>
+              <TabsTrigger value="description">คำอธิบาย</TabsTrigger>
+              <TabsTrigger value="reviews">รีวิว</TabsTrigger>
+              <TabsTrigger value="shipping">การจัดส่ง</TabsTrigger>
             </TabsList>
 
             <TabsContent value="specifications" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Technical Specifications</CardTitle>
+                  <CardTitle>ข้อมูลจำเพาะทางเทคนิค</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -391,7 +417,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Battery className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Battery Capacity</p>
+                          <p className="font-medium">ความจุแบตเตอรี่</p>
                           <p className="text-sm text-muted-foreground">{product.battery_capacity || "N/A"}</p>
                         </div>
                       </div>
@@ -399,7 +425,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Droplets className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Tank Capacity</p>
+                          <p className="font-medium">ความจุถังน้ำยา</p>
                           <p className="text-sm text-muted-foreground">{product.tank_capacity || "N/A"}</p>
                         </div>
                       </div>
@@ -407,7 +433,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Zap className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Coil Resistance</p>
+                          <p className="font-medium">ความต้านทานคอยล์</p>
                           <p className="text-sm text-muted-foreground">{product.coil_resistance || "N/A"}</p>
                         </div>
                       </div>
@@ -415,7 +441,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Palette className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Available Colors</p>
+                          <p className="font-medium">สีที่เลือกได้</p>
                           <p className="text-sm text-muted-foreground">{product.colors?.join(", ") || "N/A"}</p>
                         </div>
                       </div>
@@ -425,7 +451,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Ruler className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Dimensions</p>
+                          <p className="font-medium">ขนาด</p>
                           <p className="text-sm text-muted-foreground">{product.dimensions || "N/A"}</p>
                         </div>
                       </div>
@@ -433,7 +459,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Weight className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Weight</p>
+                          <p className="font-medium">น้ำหนัก</p>
                           <p className="text-sm text-muted-foreground">{product.weight || "N/A"}</p>
                         </div>
                       </div>
@@ -441,7 +467,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Award className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Warranty</p>
+                          <p className="font-medium">การรับประกัน</p>
                           <p className="text-sm text-muted-foreground">{product.warranty || "N/A"}</p>
                         </div>
                       </div>
@@ -449,7 +475,7 @@ export default function ProductPage() {
                       <div className="flex items-center space-x-3">
                         <Shield className="h-5 w-5 text-primary" />
                         <div>
-                          <p className="font-medium">Compatibility</p>
+                          <p className="font-medium">ความเข้ากันได้</p>
                           <p className="text-sm text-muted-foreground">{product.compatibility || "N/A"}</p>
                         </div>
                       </div>
@@ -460,19 +486,19 @@ export default function ProductPage() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold mb-2">Nicotine Options</h4>
+                      <h4 className="font-semibold mb-2">ตัวเลือกนิโคติน</h4>
                       <p className="text-sm text-muted-foreground">{product.nicotine_strength || "N/A"}</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Flavor Profile</h4>
+                      <h4 className="font-semibold mb-2">โปรไฟล์รสชาติ</h4>
                       <p className="text-sm text-muted-foreground">{product.flavor_profile || "N/A"}</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">PG/VG Ratio</h4>
+                      <h4 className="font-semibold mb-2">อัตราส่วน PG/VG</h4>
                       <p className="text-sm text-muted-foreground">{product.pg_vg_ratio || "N/A"}</p>
                     </div>
                     <div>
-                      <h4 className="font-semibold mb-2">Charging Method</h4>
+                      <h4 className="font-semibold mb-2">วิธีการชาร์จ</h4>
                       <p className="text-sm text-muted-foreground">{product.charging_method || "N/A"}</p>
                     </div>
                   </div>
@@ -483,7 +509,7 @@ export default function ProductPage() {
             <TabsContent value="description" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Product Description</CardTitle>
+                  <CardTitle>คำอธิบายสินค้า</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {product.description ? (
@@ -494,7 +520,7 @@ export default function ProductPage() {
                     </div>
                   ) : (
                     <p className="text-muted-foreground">
-                      No description available for this product.
+                      ไม่มีคำอธิบายสำหรับสินค้านี้
                     </p>
                   )}
                 </CardContent>
@@ -504,13 +530,13 @@ export default function ProductPage() {
             <TabsContent value="reviews" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Customer Reviews</CardTitle>
+                  <CardTitle>รีวิวจากลูกค้า</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-center py-8">
                     <Star className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground">
-                      Reviews feature coming soon. Check back later!
+                      ฟีเจอร์รีวิวจะมาเร็วๆ นี้ กลับมาดูใหม่นะ!
                     </p>
                   </div>
                 </CardContent>
@@ -520,29 +546,29 @@ export default function ProductPage() {
             <TabsContent value="shipping" className="mt-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Shipping & Returns</CardTitle>
+                  <CardTitle>การจัดส่งและการคืนสินค้า</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="text-center">
                       <Truck className="h-8 w-8 text-primary mx-auto mb-2" />
-                      <h4 className="font-semibold mb-1">Fast Shipping</h4>
+                      <h4 className="font-semibold mb-1">จัดส่งเร็ว</h4>
                       <p className="text-sm text-muted-foreground">
-                        Free shipping on orders over $50. Express delivery available.
+                        จัดส่งฟรีสำหรับคำสั่งซื้อมากกว่า 1,500 บาท มีบริการส่งด่วน
                       </p>
                     </div>
                     <div className="text-center">
                       <Shield className="h-8 w-8 text-primary mx-auto mb-2" />
-                      <h4 className="font-semibold mb-1">Secure Packaging</h4>
+                      <h4 className="font-semibold mb-1">บรรจุภัณฑ์ปลอดภัย</h4>
                       <p className="text-sm text-muted-foreground">
-                        Discreet packaging ensures privacy and product safety.
+                        บรรจุภัณฑ์แบบไม่เปิดเผยเพื่อความเป็นส่วนตัวและความปลอดภัยของสินค้า
                       </p>
                     </div>
                     <div className="text-center">
                       <RotateCcw className="h-8 w-8 text-primary mx-auto mb-2" />
-                      <h4 className="font-semibold mb-1">Easy Returns</h4>
+                      <h4 className="font-semibold mb-1">การคืนสินค้าทาง่าย</h4>
                       <p className="text-sm text-muted-foreground">
-                        30-day return policy on all products. No questions asked.
+                        นโยบายคืนสินค้าภายใน 30 วันสำหรับสินค้าทั้งหมด ไม่มีเงื่อนไข
                       </p>
                     </div>
                   </div>

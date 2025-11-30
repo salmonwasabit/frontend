@@ -1,9 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import AdminRoute from '@/components/AdminRoute';
+import { useAuth } from '@/lib/AuthContext';
 import Link from 'next/link';
-import { Plus, Edit, Trash2, Search, X } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, X, LayoutDashboard, Package, Tag, BarChart3, LogOut } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { API_BASE_URL } from "@/lib/config";
 
 interface Category {
   id: number;
@@ -21,30 +25,26 @@ export default function AdminCategoriesPage() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '' });
-
-  console.log('AdminCategoriesPage: Component rendered');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const router = useRouter();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    console.log('AdminCategoriesPage: useEffect triggered - setting loading to false');
-    setLoading(false);
+    fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
-    console.log('AdminCategoriesPage: fetchCategories called');
     try {
       setLoading(true);
-      console.log('AdminCategoriesPage: Making API request to /api/categories');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories`);
-      console.log('AdminCategoriesPage: API response status:', response.status);
+      const response = await fetch(`${API_BASE_URL}/api/categories`);
       if (!response.ok) {
         throw new Error(`Failed to fetch categories: ${response.status}`);
       }
       const data = await response.json();
-      console.log('AdminCategoriesPage: API response data:', data);
       setCategories(data);
       setError(null);
     } catch (err) {
-      console.error('AdminCategoriesPage: Error fetching categories:', err);
+      console.error('Error fetching categories:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);
@@ -54,7 +54,7 @@ export default function AdminCategoriesPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const url = editingCategory ? `${process.env.NEXT_PUBLIC_API_URL}/api/categories/${editingCategory.id}` : `${process.env.NEXT_PUBLIC_API_URL}/api/categories`;
+      const url = editingCategory ? `${API_BASE_URL}/api/categories/${editingCategory.id}` : `${API_BASE_URL}/api/categories`;
       const method = editingCategory ? 'PUT' : 'POST';
 
       const response = await fetch(url, {
@@ -86,7 +86,7 @@ export default function AdminCategoriesPage() {
     if (!confirm('Are you sure you want to delete this category?')) return;
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/categories/${id}`, { method: 'DELETE' });
+      const response = await fetch(`${API_BASE_URL}/api/categories/${id}`, { method: 'DELETE' });
       if (!response.ok) {
         throw new Error('Failed to delete category');
       }
@@ -101,13 +101,18 @@ export default function AdminCategoriesPage() {
     (category.description?.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
+  const handleLogout = () => {
+    logout();
+    router.push('/admin/login');
+  };
+
   if (loading) {
     return (
       <AdminRoute>
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="min-h-screen bg-background flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
-            <p className="text-gray-600">กำลังโหลดหมวดหมู่...</p>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">กำลังโหลดหมวดหมู่...</p>
           </div>
         </div>
       </AdminRoute>
@@ -116,17 +121,17 @@ export default function AdminCategoriesPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
-          <div className="bg-red-50 border border-red-200 rounded-lg p-8 max-w-md">
-            <div className="text-red-600 mb-4">
+          <div className="bg-destructive/10 border border-destructive/20 rounded-xl p-8 max-w-md">
+            <div className="text-destructive mb-4">
               <X className="h-12 w-12 mx-auto" />
             </div>
-            <h3 className="text-lg font-medium text-red-900 mb-2">เกิดข้อผิดพลาดในการโหลดหมวดหมู่</h3>
-            <p className="text-red-700 mb-4">{error}</p>
+            <h3 className="text-lg font-medium text-destructive mb-2">เกิดข้อผิดพลาดในการโหลดหมวดหมู่</h3>
+            <p className="text-destructive/80 mb-4">{error}</p>
             <button
               onClick={fetchCategories}
-              className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              className="bg-destructive text-destructive-foreground px-4 py-2 rounded-xl hover:bg-destructive/90 transition-colors"
             >
               ลองใหม่
             </button>
@@ -134,47 +139,133 @@ export default function AdminCategoriesPage() {
         </div>
       </div>
   );
-}  return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">จัดการหมวดหมู่</h1>
-                <p className="mt-2 text-gray-600">จัดการหมวดหมู่สินค้าของคุณ</p>
-              </div>
-              <div className="mt-4 sm:mt-0">
+}
+
+  return (
+    <AdminRoute>
+      <div className="min-h-screen bg-background flex">
+        {/* Mobile sidebar overlay */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
+
+        {/* Sidebar */}
+        <div className={cn(
+          "fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0",
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+          <div className="flex flex-col h-full">
+            {/* Logo */}
+            <div className="flex items-center justify-center h-16 px-4 bg-primary border-b border-border">
+              <h1 className="text-lg font-semibold text-primary-foreground">แผงควบคุมผู้ดูแลระบบ</h1>
+            </div>
+
+            {/* Navigation */}
+            <nav className="flex-1 px-4 py-6 space-y-2">
+              <Link
+                href="/admin"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <LayoutDashboard className="h-5 w-5 mr-3" />
+                แดชบอร์ด
+              </Link>
+              <Link
+                href="/admin/products"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <Package className="h-5 w-5 mr-3" />
+                จัดการสินค้า
+              </Link>
+              <Link
+                href="/admin/categories"
+                className="flex items-center px-4 py-3 text-foreground rounded-xl hover:bg-accent transition-colors bg-accent"
+              >
+                <Tag className="h-5 w-5 mr-3" />
+                จัดการหมวดหมู่
+              </Link>
+              <Link
+                href="/admin/products/new"
+                className="flex items-center px-4 py-3 text-muted-foreground rounded-xl hover:bg-accent hover:text-foreground transition-colors"
+              >
+                <Plus className="h-5 w-5 mr-3" />
+                เพิ่มสินค้า
+              </Link>
+            </nav>
+
+            {/* Logout */}
+            <div className="p-4 border-t border-border">
+              <button
+                onClick={handleLogout}
+                className="flex items-center w-full px-4 py-3 text-destructive rounded-xl hover:bg-destructive/10 transition-colors"
+              >
+                <LogOut className="h-5 w-5 mr-3" />
+                ออกจากระบบ
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="flex-1 min-w-0">
+          {/* Top bar */}
+          <div className="bg-card border-b border-border px-4 py-4 lg:px-8 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
                 <button
-                  onClick={() => setShowAddForm(true)}
-                  className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 rounded-xl text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
                 >
-                  <Plus className="h-5 w-5 mr-2" />
-                  เพิ่มหมวดหมู่
+                  <BarChart3 className="h-6 w-6" />
                 </button>
+                <h1 className="text-xl font-semibold text-card-foreground ml-4 lg:ml-0">จัดการหมวดหมู่</h1>
+              </div>
+              <div className="text-sm text-muted-foreground">
+                ยินดีต้อนรับกลับ, ผู้ดูแลระบบ
               </div>
             </div>
           </div>
 
+          <div className="p-4 lg:p-8">
+            {/* Header */}
+            <div className="mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="mt-2 text-muted-foreground">จัดการหมวดหมู่สินค้าของคุณ</p>
+                </div>
+                <div className="mt-4 sm:mt-0">
+                  <button
+                    onClick={() => setShowAddForm(true)}
+                    className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
+                  >
+                    <Plus className="h-5 w-5 mr-2" />
+                    เพิ่มหมวดหมู่
+                  </button>
+                </div>
+              </div>
+            </div>
+
           {/* Search */}
           <div className="mb-6">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-5 w-5" />
               <input
                 type="text"
                 placeholder="ค้นหาหมวดหมู่..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                className="w-full pl-10 pr-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
               />
             </div>
           </div>
 
           {/* Add/Edit Form */}
           {showAddForm && (
-            <div className="mb-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <div className="mb-6 bg-card border border-border rounded-xl p-6">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-semibold text-gray-900">
+                <h2 className="text-xl font-semibold text-card-foreground">
                   {editingCategory ? 'แก้ไขหมวดหมู่' : 'เพิ่มหมวดหมู่ใหม่'}
                 </h2>
                 <button
@@ -183,35 +274,35 @@ export default function AdminCategoriesPage() {
                     setEditingCategory(null);
                     setFormData({ name: '', description: '' });
                   }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-muted-foreground hover:text-foreground p-2 rounded-xl hover:bg-accent transition-colors"
                 >
                   <X className="h-6 w-6" />
                 </button>
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">ชื่อหมวดหมู่</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">ชื่อหมวดหมู่</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">คำอธิบาย</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">คำอธิบาย</label>
                   <textarea
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    className="w-full px-4 py-3 bg-background border border-border rounded-xl text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
                   />
                 </div>
                 <div className="flex gap-3">
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                    className="px-6 py-3 bg-primary text-primary-foreground rounded-xl font-medium hover:bg-primary/90 transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
                   >
                     {editingCategory ? 'อัปเดต' : 'เพิ่ม'}
                   </button>
@@ -222,7 +313,7 @@ export default function AdminCategoriesPage() {
                       setEditingCategory(null);
                       setFormData({ name: '', description: '' });
                     }}
-                    className="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors"
+                    className="px-6 py-3 bg-muted text-muted-foreground rounded-xl font-medium hover:bg-muted/80 transition-colors"
                   >
                     ยกเลิก
                   </button>
@@ -234,27 +325,27 @@ export default function AdminCategoriesPage() {
           {/* Categories Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredCategories.map((category) => (
-              <div key={category.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+              <div key={category.id} className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{category.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                    <h3 className="text-lg font-semibold text-card-foreground mb-2">{category.name}</h3>
+                    <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                       {category.description || 'ไม่มีคำอธิบาย'}
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       สร้างเมื่อ: {new Date(category.created_at).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="flex gap-2 ml-4">
                     <button
                       onClick={() => handleEdit(category)}
-                      className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
+                      className="p-2 text-primary hover:bg-primary/10 rounded-xl transition-colors"
                     >
                       <Edit className="h-4 w-4" />
                     </button>
                     <button
                       onClick={() => handleDelete(category.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      className="p-2 text-destructive hover:bg-destructive/10 rounded-xl transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -266,11 +357,11 @@ export default function AdminCategoriesPage() {
 
           {filteredCategories.length === 0 && (
             <div className="text-center py-12">
-              <div className="text-gray-400 mb-4">
+              <div className="text-muted-foreground mb-4">
                 <Search className="h-12 w-12 mx-auto" />
               </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">ไม่พบหมวดหมู่</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-foreground mb-2">ไม่พบหมวดหมู่</h3>
+              <p className="text-muted-foreground mb-4">
                 {categories.length === 0
                   ? 'เริ่มต้นโดยการเพิ่มหมวดหมู่แรกของคุณ'
                   : 'ลองปรับคำค้นหา'
@@ -279,7 +370,7 @@ export default function AdminCategoriesPage() {
               {categories.length === 0 && (
                 <button
                   onClick={() => setShowAddForm(true)}
-                  className="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
+                  className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all duration-200 hover:shadow-lg hover:shadow-primary/25"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   เพิ่มหมวดหมู่
@@ -287,7 +378,9 @@ export default function AdminCategoriesPage() {
               )}
             </div>
           )}
+          </div>
         </div>
       </div>
+    </AdminRoute>
   );
 }

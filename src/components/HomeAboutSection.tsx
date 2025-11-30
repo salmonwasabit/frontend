@@ -33,7 +33,7 @@ export default function HomeAboutSection() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-white to-blue-50 dark:from-slate-900 dark:to-blue-950/20">
+    <section className="py-20 px-4 bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -46,10 +46,10 @@ export default function HomeAboutSection() {
             <Sparkles className="w-4 h-4" />
             เรื่องราวของเรา
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             เกี่ยวกับ podzoon
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
             สร้างประสบการณ์การสูบไอพรีเมียมสำหรับไลฟ์สไตล์สมัยใหม่ด้วยนวัตกรรม
             คุณภาพ และชุมชนเป็นหัวใจหลัก
           </p>
@@ -65,16 +65,16 @@ export default function HomeAboutSection() {
             className="space-y-6"
           >
             <div className="prose prose-lg dark:prose-invert max-w-none">
-              <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+              <p className="text-card-foreground text-lg leading-relaxed">
                 ก่อตั้งขึ้นด้วยความหลงใหลในนวัตกรรมและคุณภาพ{" "}
-                <strong className="text-blue-600 dark:text-blue-400">
+                <strong className="text-primary">
                   podzoon
                 </strong>{" "}
                 แสดงถึงจุดสูงสุดของนวัตกรรมและการออกแบบ
                 เราเชื่อในการมอบประสบการณ์ที่ดีที่สุดให้กับลูกค้าของเรา
                 ผ่านผลิตภัณฑ์ที่ทันสมัยและบริการที่ยอดเยี่ยม
               </p>
-              <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
+              <p className="text-card-foreground text-lg leading-relaxed">
                 การเดินทางของเราเริ่มต้นด้วยภารกิจที่เรียบง่าย:
                 สร้างผลิตภัณฑ์การสูบไอที่ไม่เพียงแต่ทำงานได้อย่างยอดเยี่ยม
                 แต่ยังช่วยยกระดับประสบการณ์การสูบไอโดยรวม
@@ -93,10 +93,10 @@ export default function HomeAboutSection() {
               <div className="flex items-start gap-4">
                 <Target className="w-8 h-8 text-blue-600 dark:text-blue-400 mt-1 flex-shrink-0" />
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-2">
                     ภารกิจของเรา
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-muted-foreground">
                     เพื่อเสริมพลังผู้สูบไอทั่วโลกด้วยผลิตภัณฑ์พรีเมียม
                     คำแนะนำจากผู้เชี่ยวชาญ และชุมชนที่เฉลิมฉลอง
                     ศิลปะแห่งการสูบไอ
@@ -160,15 +160,15 @@ export default function HomeAboutSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -5 }}
             >
-              <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white dark:bg-slate-800 group">
+              <Card className="h-full border border-border shadow-lg hover:shadow-xl transition-all duration-300 bg-card group">
                 <CardContent className="p-6 text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
                     <value.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                  <h3 className="text-lg font-semibold text-card-foreground mb-3">
                     {value.title}
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {value.description}
                   </p>
                 </CardContent>
@@ -184,12 +184,12 @@ export default function HomeAboutSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-center mt-16"
         >
-          <p className="text-xl text-gray-700 dark:text-gray-300 font-medium">
+          <p className="text-xl text-card-foreground font-medium">
             เข้าร่วมกับเราในการยอมรับไลฟ์สไตล์ที่ทั้งทันสมัยและมีสติ
           </p>
-          <p className="text-lg text-gray-600 dark:text-gray-400 mt-2">
+          <p className="text-lg text-muted-foreground mt-2">
             ยินดีต้อนรับสู่{" "}
-            <span className="text-blue-600 dark:text-blue-400 font-semibold">
+            <span className="text-primary font-semibold">
               podzoon
             </span>
           </p>
