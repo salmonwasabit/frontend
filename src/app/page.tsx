@@ -1,6 +1,5 @@
 import HeroSection from "@/components/HeroSection";
 import BrandsSection from "@/components/BrandsSection";
-import HomeAboutSection from "@/components/HomeAboutSection";
 import HomeContactSection from "@/components/HomeContactSection";
 
 export default function Home() {
@@ -8,7 +7,6 @@ export default function Home() {
     <div className="min-h-screen bg-background text-foreground">
       <HeroSection />
       <BrandsSection />
-      <HomeAboutSection />
       <HomeContactSection />
     </div>
   );
